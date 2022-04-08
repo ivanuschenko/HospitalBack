@@ -21,3 +21,11 @@ module.exports.createAppointment = (req, res, next) => {
     });
   });
 };
+module.exports.deleteAppointment = (req, res, next) => {
+  const queryId = req.query._id;  
+  sickList.deleteOne({_id: queryId}).then(result => { 
+    sickList.find().then(result => {          
+      res.send(result);                 
+    });   
+  });
+};
