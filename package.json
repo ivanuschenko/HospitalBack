@@ -1,0 +1,35 @@
+{
+  "name": "nodejsproject",
+  "version": "1.0.0",
+  "description": "For start project need run commands: * npm install * npm start",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon node app.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.19.2",
+    "cors": "^2.8.5",
+    "express": "^4.17.3",
+    "mongodb": "^4.4.1",
+    "mongoose": "^6.2.9",
+    "nodemon": "^2.0.7"
+  },
+  "nodemonConfig": {
+    "ignore": [
+      "test/*",
+      "docs/*"
+    ],
+    "delay": "2500"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/usatovaDasha/nodeJsProjectShareToDo.git"
+  },
+  "bugs": {
+    "url": "https://github.com/usatovaDasha/nodeJsProjectShareToDo/issues"
+  },
+  "homepage": "https://github.com/usatovaDasha/nodeJsProjectShareToDo#readme"
+}
