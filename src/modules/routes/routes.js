@@ -7,12 +7,15 @@ const {
 } = require('../controllers/user.controller');
 
 const {
-  getAllPatients
+  getAllPatients,
+  createAppointment
+  
 } = require('../controllers/appointment.controller');
 
 router.post('/createUser', createUser);
 router.post('/singIn', singIn);
 
 router.get('/allPatients', getAllPatients);
+router.post('/createAppointment', createAppointment);
 
 module.exports = router;
