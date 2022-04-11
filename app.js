@@ -3,17 +3,19 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 const mongoose = require('mongoose');
 const app = express();
+require('dotenv').config();
 
 const apiRoutes = require('./src/modules/routes/routes');
+const URL = process.env.URL;
 
 app.use(cors());
-app.use(bodyParser.json());
+app.use(express.json());
 app.use("/", apiRoutes);
 
-const url = 'mongodb+srv://admin:admin@cluster0.pyrwd.mongodb.net/Medecine?retryWrites=true&w=majority';
-mongoose.connect(url, { useNewUrlParser: true, useUnifiedTopology: true });
+mongoose.connect(URL, { useNewUrlParser: true, useUnifiedTopology: true });
 
 app.listen(8000, () => {
   console.log('Example app listening on port 8000!')
 });
+
 
