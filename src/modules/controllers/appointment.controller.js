@@ -9,11 +9,13 @@ module.exports.getAllList = (req, res,) => {
 };
 
 module.exports.createAppointment = (req, res) => {
-  const list = new Appointment(req.body);
-  if (!list.name || !list.password ) {
-    res.send('status 404 one of values is empty');     
+  if (!req.body.name && !req.body.password ) {
+    res.status(422).send('one of values is empty');    
   }  
+  const list = new Appointment(req.body);  
   list.save().then(result => {  
     res.send(list);
   }).catch(err => res.status(404).send(err));
  };
+
+ 
