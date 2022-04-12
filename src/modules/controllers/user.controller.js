@@ -2,7 +2,7 @@ const { status } = require('express/lib/response');
 const User = require('../../models/users');
 
 module.exports.createUser = (req, res) => {  
-  if (!req.body.name || !req.body.password ) {
+  if (!req.body.name && !req.body.password ) {
     res.status(422).send('one of values is empty');    
   }
   const user = new User(req.body); 
@@ -19,7 +19,7 @@ module.exports.singIn = (req, res) => {
   }
 
   User.findOne(user).then(result => {
-    result ? res.status(200).send(result): res.status(404).send(false);    
+    result ? res.status(200).send(result): res.status(404).send('Incorrect name or password');    
   });
 };
 
