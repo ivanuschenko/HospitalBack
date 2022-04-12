@@ -1,12 +1,11 @@
 const { status } = require('express/lib/response');
 const User = require('../../models/users');
 
-module.exports.createUser = (req, res) => {
-  const user = new User(req.body);
-  if (!user.name || !user.password ) {
-    res.status(404).send('one of values is empty');    
+module.exports.createUser = (req, res) => {  
+  if (!req.body.name || !req.body.password ) {
+    res.status(422).send('one of values is empty');    
   }
-
+  const user = new User(req.body); 
   user.save().then(result => {  
     res.status(200).send(result);
   }).catch(err => res.status(404).send(err));
@@ -20,6 +19,7 @@ module.exports.singIn = (req, res) => {
   }
 
   User.findOne(user).then(result => {
-    result ? res.send(result): res.send(false);    
+    result ? res.status(200).send(result): res.status(404).send(false);    
   });
 };
+
