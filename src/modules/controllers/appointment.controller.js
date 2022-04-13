@@ -27,4 +27,14 @@ module.exports.createAppointment = (req, res) => {
    res.status(200).send(result);
   });
 };
+
+module.exports.deleteAppointment = (req, res) => {
+  if (!req.query._id) {
+    res.status(422).send('Id is not defiend'); 
+  } 
+  const queryId = req.query._id;  
+  sickList.deleteOne({_id: queryId}).then(result => {
+    res.status(200).send('success!')      
+  });
+};
  
