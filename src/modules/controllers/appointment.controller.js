@@ -17,4 +17,14 @@ module.exports.createAppointment = (req, res) => {
     res.send(list);
   }).catch(err => res.status(404).send(err));
  };
+
+ module.exports.updateAppointment = (req, res) => {
+  if (!req.query._id) {
+    res.status(422).send('Id is not defiend'); 
+  } 
+  const bodyId = req.query._id;  
+  Appointment.updateOne({_id: bodyId}, req.body).then(result => {
+   res.status(200).send(result);
+  });
+};
  
