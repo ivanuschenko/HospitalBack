@@ -7,3 +7,14 @@ module.exports.getAllList = (req, res,) => {
     res.status(200).send(result);    
   }).catch(err => res.status(404).send(err));
 };
+
+module.exports.createAppointment = (req, res) => {
+  if (!req.body.patient && !req.body.doctor && !req.body.date && !req.body.complaint) {
+    res.status(422).send('one of value is empty');    
+  }
+  const list = new Appointment(req.body);  
+  list.save().then(result => {  
+    res.send(list);
+  }).catch(err => res.status(404).send(err));
+ };
+ 
