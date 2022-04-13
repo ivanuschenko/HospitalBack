@@ -24,9 +24,7 @@ module.exports.createAppointment = (req, res) => {
   } 
   const bodyId = req.query._id;  
   Appointment.updateOne({_id: bodyId}, req.body).then(result => {
-    Appointment.find().then(result => {
-      res.send(result);
-    });
+   res.status(200).send(result);
   });
 };
  
