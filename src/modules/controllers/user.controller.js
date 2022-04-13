@@ -1,17 +1,22 @@
 const { status } = require('express/lib/response');
 const User = require('../../models/users');
+const userService = require('../service/user-service');
 
-module.exports.createUser = (req, res) => {  
-  if (!req.body.name && !req.body.password ) {
-    res.status(422).send('one of values is empty');    
+module.exports.registration = async (req, res) => { 
+  try {
+    if (!req.body.name && !req.body.password ) {
+      throw new Error(res.status(422).send('one of values is empty'));     
+    }  
+    const {name, password} = req.body;
+    const userData = await userService.registration(name, password);
+    res.cookie('refreshToken', userData.refreshToken, {maxAge: 30*24*60*60*1000, httpOnly: true})
+    return res.json(userData); 
+  } catch (e) {
+    res.status(404).send('Incorect login or password');    
   }
-  const user = new User(req.body); 
-  user.save().then(result => {  
-    res.status(200).send(result);
-  }).catch(err => res.status(404).send(err));
- };
-
-module.exports.singIn = (req, res) => {
+}
+ 
+module.exports.signIn = (req, res) => {
   if (!req.body.name && !req.body.password ) {
     res.status(422).send('one of values is empty');    
   }  
@@ -21,6 +26,4 @@ module.exports.singIn = (req, res) => {
     result ? res.status(200).send(result): res.status(404).send('Incorrect name or password');    
   });
 };
-
-
-
+ 
