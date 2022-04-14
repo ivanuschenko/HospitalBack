@@ -2,6 +2,7 @@ const UserModel = require('../../models/users');
 const bcrypt = require('bcrypt');
 const tokenService = require('./token-service');
 const ApiError = require('../../exceptions/api-error');
+const { refresh } = require('../controllers/user.controller');
 
 class UserService {
     async registration(name, password) {
@@ -38,11 +39,37 @@ class UserService {
         user: name,
         id : user._id
       }
-  }
-    async signOut(refreshToken) {
+  }    
+      async signOut(refreshToken) {
       const token = await tokenService.removeToken(refreshToken);
       return token;
   }
-}
 
+    async refresh(refreshToken) {
+
+      if (!refreshToken) {
+        throw ApiError.UnauthorizedError();
+      }
+      const userData = tokenService.validateRefreshToken(refreshToken);
+      const tokenFromDb = tokenService.findToken(refreshToken);
+      if (!userData || !tokenFromDb) {
+        throw ApiError.UnauthorizedError();
+      }
+      const user = await UserModel.findById(userData.id);
+      const tokens = tokenService.generateTokens({id : user._id, name: user.name});      
+      await tokenService.saveToken(user._id , tokens.refreshToken);
+      return {
+        ...tokens, 
+        user: user.name,
+        id : user._id
+      }   
+    }
+    
+    async getAllUsers() {
+      const users = await UserModel.find();
+      return users
+    }
+
+   
+}
 module.exports = new UserService();
