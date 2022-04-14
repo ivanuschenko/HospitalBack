@@ -1,7 +1,6 @@
 const { status } = require('express/lib/response');
 const User = require('../../models/users');
 const userService = require('../service/user-service');
-const ApiError = require('../../exceptions/api-error');
 
 module.exports.registration = async (req, res, next) => { 
   try {     
@@ -32,7 +31,6 @@ module.exports.signOut = async (req, res, next) => {
       return res.json(token);
   } catch (e) {
       next(e);
-  }
-  
+  }  
 }
 

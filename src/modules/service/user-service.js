@@ -10,7 +10,7 @@ class UserService {
             throw ApiError.BadRequest(`Пользователь с данным логином: ${name} уже существует`)
         }
         if (!name || !password ) {
-          throw ApiError.BadRequest('one of values is empty');     
+          throw ApiError.BadRequest('');     
         }                  
         const hashPassword = await bcrypt.hash(password, 3);
         const user = await UserModel.create({name, password: hashPassword})         
