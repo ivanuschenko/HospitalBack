@@ -19,6 +19,6 @@ const PORT = process.env.PORT;
 mongoose.connect(URL, { useNewUrlParser: true, useUnifiedTopology: true });
 
 app.listen(PORT, () => {
-  console.log('Example app listening on port 8000!')
+  console.log(`Example app listening on port ${PORT}!`)
 });
 

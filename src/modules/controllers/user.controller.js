@@ -12,7 +12,7 @@ module.exports.registration = async (req, res) => {
     res.cookie('refreshToken', userData.refreshToken, {maxAge: 30*24*60*60*1000, httpOnly: true})
     return res.json(userData); 
   } catch (e) {
-    res.status(404).send('Incorect login or password');    
+    res.status(401).send('Incorect login or password');    
   }
 }
  

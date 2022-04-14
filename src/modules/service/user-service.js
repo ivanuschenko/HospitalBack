@@ -1,7 +1,6 @@
 const UserModel = require('../../models/users');
 const bcrypt = require('bcrypt');
 const tokenService = require('./token-service');
-const UserDto = require('../dtos/user-dto');
 
 class UserService {
     async registration(name, password) {
@@ -11,12 +10,13 @@ class UserService {
         }             
         const hashPassword = await bcrypt.hash(password, 3);
         const user = await UserModel.create({name, password: hashPassword})  
-        const userDto = new UserDto(user); // id, name
-        const tokens = tokenService.generateTokens({...userDto});
-        await tokenService.saveToken(userDto.id, tokens.refreshToken);
+        
+        const tokens = tokenService.generateTokens({id : user._id, name: user.name});
+        await tokenService.saveToken(user._id , tokens.refreshToken);
         return {
           ...tokens, 
-          user: userDto
+          user: name,
+          id : user._id
         }
     }
 }
