@@ -10,7 +10,7 @@ class UserService {
             throw ApiError.BadRequest(`Пользователь с данным логином: ${name} уже существует`)
         }
         if (!name || !password ) {
-          throw ApiError.BadRequest('');     
+          throw ApiError.BadRequest('Одно из значений не задано');     
         }                  
         const hashPassword = await bcrypt.hash(password, 3);
         const user = await UserModel.create({name, password: hashPassword})         
@@ -23,9 +23,9 @@ class UserService {
         }
     }
     async signIn(name, password) {
-      const user = await UserModel.findOne({name})
+      const user = await UserModel.findOne({name});
       if (!user) {
-          throw ApiError.BadRequest(`Пользователь с таким именем ${name} не найден`)
+          throw ApiError.BadRequest(`Пользователь с таким именем ${name} не найден`);
       }
       const isPassEquals = await bcrypt.compare(password, user.password);
       if (!isPassEquals) {
@@ -44,6 +44,5 @@ class UserService {
       return token;
   }
 }
-
 
 module.exports = new UserService();
