@@ -3,10 +3,12 @@ const router = express.Router();
 
 const {
   registration,
-  signIn,  
+  signIn,
+  signOut  
 } = require('../controllers/user.controller');
  
-router.post('/registration', registration);
+router.post('/registration',registration);
 router.post('/signIn', signIn);
+router.post('/signOut', signOut);
 
 module.exports = router;
