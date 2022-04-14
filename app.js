@@ -8,6 +8,7 @@ const AppointsRoutes = require('./src/modules/routes/AppoinmentRoutes')
 const cookieParser = require('cookie-parser');
 const errorMiddleware = require('./src/middlewares/error-middlewares');
 
+
 app.use(cors());
 app.use(express.json());
 app.use(cookieParser());
