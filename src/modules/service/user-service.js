@@ -2,6 +2,7 @@ const UserModel = require('../../models/users');
 const bcrypt = require('bcrypt');
 const tokenService = require('./token-service');
 const ApiError = require('../../exceptions/api-error');
+const { refresh } = require('../controllers/user.controller');
 
 class UserService {
     async registration(name, password) {
@@ -11,15 +12,13 @@ class UserService {
         }
         if (!name || !password ) {
           throw ApiError.BadRequest('Одно из значений не задано');     
-        }                  
+        };                  
         const hashPassword = await bcrypt.hash(password, 3);
         const user = await UserModel.create({name, password: hashPassword})         
         const tokens = tokenService.generateTokens({id : user._id, name: user.name});
         await tokenService.saveToken(user._id , tokens.refreshToken);
         return {
-          ...tokens, 
-          user: name,
-          id : user._id
+          ...tokens           
         }
     }
     async signIn(name, password) {
@@ -34,15 +33,30 @@ class UserService {
       const tokens = tokenService.generateTokens({id : user._id, name: user.name});      
       await tokenService.saveToken(user._id , tokens.refreshToken);
       return {
-        ...tokens, 
-        user: name,
-        id : user._id
+        ...tokens        
       }
-  }
-    async signOut(refreshToken) {
+  }    
+      async signOut(refreshToken) {      
+      const userData = User.model.verify(refreshToken, process.env.JWT_REFRESH_SECRET);          
       const token = await tokenService.removeToken(refreshToken);
       return token;
   }
+    async refresh(refreshToken) {
+      if (!refreshToken) {
+        throw ApiError.UnauthorizedError();
+      }
+      const userData = tokenService.validateRefreshToken(refreshToken);
+      const tokenFromDb = tokenService.findToken(refreshToken);
+      if (!userData || !tokenFromDb) {
+        throw ApiError.UnauthorizedError();
+      }
+      const user = await UserModel.findById(userData.id);
+      const tokens = tokenService.generateTokens({id : user._id, name: user.name});      
+      await tokenService.saveToken(user._id , tokens.refreshToken);
+      return {
+        ...tokens        
+      }   
+    }   
+     
 }
-
 module.exports = new UserService();
