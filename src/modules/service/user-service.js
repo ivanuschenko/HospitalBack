@@ -12,7 +12,7 @@ class UserService {
         }
         if (!name || !password ) {
           throw ApiError.BadRequest('Одно из значений не задано');     
-        }                  
+        };                  
         const hashPassword = await bcrypt.hash(password, 3);
         const user = await UserModel.create({name, password: hashPassword})         
         const tokens = tokenService.generateTokens({id : user._id, name: user.name});

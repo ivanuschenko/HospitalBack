@@ -2,7 +2,6 @@ const { status } = require('express/lib/response');
 const Appointment = require('../../models/appointments');
 const ListService = require('../service/appointmets-service');
 const UserModel = require('../../models/users');
-const jwt = require('jsonwebtoken');
 
 module.exports.getAllList = async (req, res, next) => {
   try {
@@ -18,8 +17,7 @@ module.exports.createAppointment = async (req, res, next) => {
   try {
     const {refreshToken} = req.cookies;
     const {patient, doctor, date, complaint} = req.body;
-    const listData = await ListService.createNewList(patient, doctor, date, complaint, refreshToken)
-    console.log(listData);
+    const listData = await ListService.createNewList(patient, doctor, date, complaint, refreshToken);    
     res.send(listData);    
   } catch (e) {
     next(e); 
@@ -45,5 +43,3 @@ module.exports.deleteAppointment = (req, res) => {
     res.status(200).send('success!')      
   });
 };
-
-

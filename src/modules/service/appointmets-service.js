@@ -11,7 +11,7 @@ class ListService {
       throw ApiError.NotAllFields();
     }
     const userData = jwt.verify(token, process.env.JWT_REFRESH_SECRET);
-    const allListByID = AppointModel.find({userID : userData.id})
+    const allListByID = AppointModel.find({userID : userData.id});
     return(allListByID);
   }
 
