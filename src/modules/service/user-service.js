@@ -18,9 +18,7 @@ class UserService {
         const tokens = tokenService.generateTokens({id : user._id, name: user.name});
         await tokenService.saveToken(user._id , tokens.refreshToken);
         return {
-          ...tokens, 
-          user: name,
-          id : user._id
+          ...tokens           
         }
     }
     async signIn(name, password) {
@@ -35,18 +33,15 @@ class UserService {
       const tokens = tokenService.generateTokens({id : user._id, name: user.name});      
       await tokenService.saveToken(user._id , tokens.refreshToken);
       return {
-        ...tokens, 
-        user: name,
-        id : user._id
+        ...tokens        
       }
   }    
-      async signOut(refreshToken) {
+      async signOut(refreshToken) {      
+      const userData = User.model.verify(refreshToken, process.env.JWT_REFRESH_SECRET);          
       const token = await tokenService.removeToken(refreshToken);
       return token;
   }
-
     async refresh(refreshToken) {
-
       if (!refreshToken) {
         throw ApiError.UnauthorizedError();
       }
@@ -59,17 +54,9 @@ class UserService {
       const tokens = tokenService.generateTokens({id : user._id, name: user.name});      
       await tokenService.saveToken(user._id , tokens.refreshToken);
       return {
-        ...tokens, 
-        user: user.name,
-        id : user._id
+        ...tokens        
       }   
-    }
-    
-    async getAllUsers() {
-      const users = await UserModel.find();
-      return users
-    }
-
-   
+    }   
+     
 }
 module.exports = new UserService();

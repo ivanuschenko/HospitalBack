@@ -1,21 +1,30 @@
 const { status } = require('express/lib/response');
 const Appointment = require('../../models/appointments');
+const ListService = require('../service/appointmets-service');
+const UserModel = require('../../models/users');
+const jwt = require('jsonwebtoken');
 
-module.exports.getAllList = (req, res) => {
-  Appointment.find().then(result => {
-    res.status(200).send(result);    
-  }).catch(err => res.status(404).send(err));
+module.exports.getAllList = async (req, res, next) => {
+  try {
+    const {refreshToken} = req.cookies;
+    const listById = await ListService.showById(refreshToken);
+    res.send(listById);
+  } catch (e) {
+    next(e);
+  } 
 };
 
-module.exports.createAppointment = (req, res) => {
-  if (!req.body.patient && !req.body.doctor && !req.body.date && !req.body.complaint) {
-    res.status(422).send('one of value is empty');    
-  }
-  const list = new Appointment(req.body);  
-  list.save().then(result => {  
-    res.send(list);
-  }).catch(err => res.status(404).send(err));
- };
+module.exports.createAppointment = async (req, res, next) => {
+  try {
+    const {refreshToken} = req.cookies;
+    const {patient, doctor, date, complaint} = req.body;
+    const listData = await ListService.createNewList(patient, doctor, date, complaint, refreshToken)
+    console.log(listData);
+    res.send(listData);    
+  } catch (e) {
+    next(e); 
+  } 
+};
 
  module.exports.updateAppointment = (req, res) => {
   if (!req.query._id) {
@@ -36,4 +45,5 @@ module.exports.deleteAppointment = (req, res) => {
     res.status(200).send('success!')      
   });
 };
- 
+
+

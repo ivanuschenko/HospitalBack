@@ -44,12 +44,3 @@ module.exports.refresh = async(req, res, next) => {
   }
 }
 
-module.exports.getAllUsers = async(req, res, next) => {
-  try {
-    const users = await userService.getAllUsers();
-    return res.json(users)
-  } catch (e) {
-    next(e);
-  }
-}
-

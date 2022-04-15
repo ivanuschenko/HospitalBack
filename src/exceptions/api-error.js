@@ -12,6 +12,10 @@ module.exports = class ApiError extends Error {
       return new ApiError(401, 'Пользователь не авторизован');
   }
 
+  static NotAllFields() {
+    return new ApiError(422, 'Вы ввели не все значения!');
+  }
+
   static BadRequest(message, errors = []) {
       return new ApiError(400, message, errors);
   }
