@@ -16,7 +16,7 @@ class UserService {
         const hashPassword = await bcrypt.hash(password, 3);
         const user = await UserModel.create({name, password: hashPassword})         
         const tokens = tokenService.generateTokens({id : user._id, name: user.name});
-        await tokenService.saveToken(user._id , tokens.refreshToken);
+        await tokenService.saveToken(user._id , tokens.accessToken);
         return {
           ...tokens           
         }
@@ -31,14 +31,13 @@ class UserService {
           throw ApiError.BadRequest('Неверный пароль');
       }      
       const tokens = tokenService.generateTokens({id : user._id, name: user.name});      
-      await tokenService.saveToken(user._id , tokens.refreshToken);
+      await tokenService.saveToken(user._id , tokens.refreshToken);      
       return {
         ...tokens        
       }
   }    
-      async signOut(refreshToken) {      
-      const userData = User.model.verify(refreshToken, process.env.JWT_REFRESH_SECRET);          
-      const token = await tokenService.removeToken(refreshToken);
+      async signOut(refreshToken) {
+      const token = await tokenService.removeToken(refreshToken);      
       return token;
   }
     async refresh(refreshToken) {
