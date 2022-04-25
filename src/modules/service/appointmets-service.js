@@ -4,7 +4,7 @@ const AppointModel = require('../../models/appointments');
 const UserModel = require('../../models/users');
 const ApiError = require('../../exceptions/api-error');
 
-class ListService {
+class AppointmentService {
    
   async showById(token) {
     if (!token) {
@@ -36,9 +36,8 @@ class ListService {
     const userData = jwt.verify(token, process.env.JWT_REFRESH_SECRET);
     const appoint = await AppointModel
     .updateOne({_id: id}, body);
-    const result = AppointModel.find({userID : userData.id})
-    console.log('result', result)
+    const result = AppointModel.find({userID : userData.id})    
     return result; 
   }
 }
-module.exports = new ListService();
+module.exports = new AppointmentService();

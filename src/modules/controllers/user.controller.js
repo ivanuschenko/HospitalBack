@@ -23,6 +23,7 @@ module.exports.signIn = async (req, res, next) => {
       next(e);      
     }
 }
+
 module.exports.signOut = async (req, res, next) => {  
   try {
       const {refreshToken} = req.cookies;         
@@ -33,6 +34,7 @@ module.exports.signOut = async (req, res, next) => {
       next(e);
   }  
 }
+
 module.exports.refresh = async(req, res, next) => {
   try {
     const {refreshToken} = req.cookies;
@@ -40,7 +42,7 @@ module.exports.refresh = async(req, res, next) => {
     res.cookie('refreshToken', userData.refreshToken, {maxAge: 30 * 24 * 60 * 60 * 1000, httpOnly: true});
     return res.json(userData);
   } catch (e) {
-    next(e);
+      next(e);
   }
 }
 
