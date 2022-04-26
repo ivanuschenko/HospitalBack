@@ -2,7 +2,6 @@ const UserModel = require('../../models/users');
 const bcrypt = require('bcrypt');
 const tokenService = require('./token-service');
 const ApiError = require('../../exceptions/api-error');
-const { refresh } = require('../controllers/user.controller');
 
 class UserService {
   async registration(name, password) {
@@ -25,11 +24,11 @@ class UserService {
   async signIn(name, password) {
     const user = await UserModel.findOne({name});
     if (!user) {
-        throw ApiError.BadRequest(`Пользователь с таким именем ${name} не найден`);
+      throw ApiError.BadRequest(`Пользователь с таким именем ${name} не найден`);
     }
     const isPassEquals = await bcrypt.compare(password, user.password);
     if (!isPassEquals) {
-        throw ApiError.BadRequest('Неверный пароль');
+      throw ApiError.BadRequest('Неверный пароль');
     }      
     const tokens = tokenService.generateTokens({id : user._id, name: user.name});      
     await tokenService.saveToken(user._id , tokens.refreshToken);      

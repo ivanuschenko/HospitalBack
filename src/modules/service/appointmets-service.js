@@ -1,7 +1,5 @@
 const jwt = require('jsonwebtoken');
-const tokenModel = require('../../models/token');
 const AppointModel = require('../../models/appointments');
-const UserModel = require('../../models/users');
 const ApiError = require('../../exceptions/api-error');
 
 class AppointmentService {
@@ -9,8 +7,8 @@ class AppointmentService {
   async showById(token) {
     if (!token) {
       throw ApiError.NotAllFields();
-    }    
-    const userData = jwt.verify(token, process.env.JWT_REFRESH_SECRET);       
+    }     
+    const userData = jwt.verify(token, process.env.JWT_ACCESS_SECRET);          
     const allListByID = AppointModel.find({userID : userData.id});    
     return(allListByID);
   }
@@ -19,7 +17,7 @@ class AppointmentService {
     if (!name && !doctor && !date && !list) {
       throw ApiError.NotAllFields();
     }
-  const userData = jwt.verify(token, process.env.JWT_REFRESH_SECRET); 
+  const userData = jwt.verify(token, process.env.JWT_ACCESS_SECRET); 
   const appoint = await AppointModel
   .create({
     patient: name,
@@ -33,7 +31,7 @@ class AppointmentService {
   }
 
   async updateOneList(id, body, token) {    
-    const userData = jwt.verify(token, process.env.JWT_REFRESH_SECRET);
+    const userData = jwt.verify(token, process.env.JWT_ACCESS_SECRET);
     const appoint = await AppointModel
     .updateOne({_id: id}, body);
     const result = AppointModel.find({userID : userData.id})    
