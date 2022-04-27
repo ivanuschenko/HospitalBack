@@ -14,27 +14,37 @@ module.exports.getAllList = async (req, res, next) => {
 
 module.exports.createAppointment = async (req, res, next) => {
   try {
-    const {accessToken} = req.cookies;
-    const { name, doctor, date, complaint } = req.body;      
-    const listData = await AppointmentService.createNewList(name, doctor, date, complaint, accessToken);        
-    res.send(listData);    
+    const { accessToken } = req.cookies;
+    const { name, doctor, date, complaint } = req.body;
+    const listData = await AppointmentService.createNewList(
+      name,
+      doctor,
+      date,
+      complaint,
+      accessToken
+    );
+    res.send(listData);
   } catch (e) {
-    next(e);    
-  } 
+    next(e);
+  }
 };
 
- module.exports.updateAppointment = async (req, res) => {
+module.exports.updateAppointment = async (req, res, next) => {
   if (!req.query._id) {
-    res.status(422).send('Id is not defiend');    
+    res.status(422).send('Id is not defiend');
   }
-   try {
-    const {accessToken} = req.cookies;       
-    const bodyId = req.query._id;    
-    const result = await AppointmentService.updateOneList(bodyId, req.body, accessToken);    
-    res.send(result);  
-   } catch (e) {
-     console.log(e);
-   }   
+  try {
+    const { accessToken } = req.cookies;
+    const bodyId = req.query._id;
+    const result = await AppointmentService.updateOneList(
+      bodyId,
+      req.body,
+      accessToken
+    );
+    res.send(result);
+  } catch (e) {
+    next(e);
+  }
 };
 
 module.exports.deleteAppointment = (req, res) => {

@@ -8,8 +8,8 @@ class TokenService {
     return {
       accessToken,
       refreshToken
-      }
-    }  
+    }
+  }  
            
   async saveToken(userId, refreshToken) {
     const tokenData = await tokenModel.findOne({user: userId});
@@ -27,14 +27,13 @@ class TokenService {
   }
 
   async findToken (refreshToken) {       
-      const userData = tokenModel.findOne({refreshToken});      
+      const userData = await tokenModel.findOne({refreshToken});      
       return userData;    
   }
 
   async validateAccessToken (token) {
     try {
-      const userData = User.model.verify(token, process.env.JWT_ACCESS_SECRET);
-      
+      const userData = User.model.verify(token, process.env.JWT_ACCESS_SECRET);      
       return userData;
     } catch(e) {
       return null;

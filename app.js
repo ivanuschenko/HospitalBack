@@ -1,12 +1,13 @@
 const express = require('express');
 const cors = require('cors');
 const mongoose = require('mongoose');
+const cookieParser = require('cookie-parser');
 const app = express();
 require('dotenv').config();
 const userRoutes = require('./src/modules/routes/userRoutes');
 const AppointsRoutes = require('./src/modules/routes/AppoinmentRoutes');
-const cookieParser = require('cookie-parser');
 const errorMiddleware = require('./src/middlewares/error-middlewares');
+
 
 app.use(cors({
   credentials: true,
