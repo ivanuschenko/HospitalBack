@@ -17,17 +17,17 @@ class AppointmentService {
     if (!name && !doctor && !date && !list) {
       throw ApiError.NotAllFields();
     }
-  const userData = jwt.verify(token, process.env.JWT_ACCESS_SECRET); 
-  const appoint = await Appointment
-  .create({
-    patient: name,
-    doctor: doctor,
-    date : date,
-    complaint: list,
-    userID: userData.id
-    });
-  const result = Appointment.find({userID : userData.id})  
-  return result;    
+    const userData = jwt.verify(token, process.env.JWT_ACCESS_SECRET); 
+    const appoint = await Appointment
+    .create({
+      patient: name,
+      doctor: doctor,
+      date : date,
+      complaint: list,
+      userID: userData.id
+      });
+    const result = Appointment.find({userID : userData.id})  
+    return result;    
   }
 
   async updateOneList(id, body, token) {    

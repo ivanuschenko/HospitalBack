@@ -1,6 +1,7 @@
 const { status } = require('express/lib/response');
 const User = require('../../models/users');
 const userService = require('../service/user-service');
+const lifeTime = {maxAge: 30 * 24 * 60 * 60 * 1000, httpOnly: true}
 
 module.exports.registration = async (req, res, next) => {
   try {
@@ -12,7 +13,7 @@ module.exports.registration = async (req, res, next) => {
     });
     return res.json(userData);
   } catch (e) {
-      next(e);
+    next(e);
   }
 };
  
@@ -20,8 +21,8 @@ module.exports.signIn = async (req, res, next) => {
   const { name, password } = req.body;     
   try {    
     const userData = await userService.signIn(name, password);
-    res.cookie('accessToken', userData.accessToken, {maxAge: 30 * 24 * 60 * 60 * 1000, httpOnly: true});          
-    res.cookie('refreshToken', userData.refreshToken, {maxAge: 30 * 24 * 60 * 60 * 1000, httpOnly: true});
+    res.cookie('accessToken', userData.accessToken, lifeTime);          
+    res.cookie('refreshToken', userData.refreshToken, lifeTime);
     return res.json(userData);    
   } catch (e) {
       next(e);      

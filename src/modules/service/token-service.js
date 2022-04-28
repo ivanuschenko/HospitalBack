@@ -27,8 +27,8 @@ class TokenService {
   }
 
   async findToken (refreshToken) {       
-      const userData = await tokenModel.findOne({refreshToken});      
-      return userData;    
+    const userData = await tokenModel.findOne({refreshToken});      
+    return userData;    
   }
 
   async validateAccessToken (token) {
