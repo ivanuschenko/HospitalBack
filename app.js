@@ -6,8 +6,8 @@ require('dotenv').config();
 
 const app = express();
 
-const userRoutes = require('./src/modules/routes/userRoutes');
-const AppointsRoutes = require('./src/modules/routes/AppoinmentRoutes');
+const userRoutes = require('./src/modules/routes/user');
+const AppointsRoutes = require('./src/modules/routes/appoinment');
 const errorMiddleware = require('./src/middlewares/error-middlewares');
 
 app.use(cors({

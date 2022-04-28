@@ -25,8 +25,8 @@ module.exports.signIn = async (req, res, next) => {
     res.cookie('refreshToken', userData.refreshToken, lifeTime);
     return res.json(userData);    
   } catch (e) {
-      next(e);      
-    }
+    next(e);      
+  }
 };
 
 module.exports.signOut = async (req, res, next) => {  
@@ -37,7 +37,7 @@ module.exports.signOut = async (req, res, next) => {
     res.clearCookie('refreshToken');
     return res.json(token);
   } catch (e) {
-      next(e);
+    next(e);
   }  
 };
 
@@ -51,7 +51,7 @@ module.exports.refresh = async(req, res, next) => {
     });
     return res.json(userData);
   } catch (e) {
-      next(e);
+    next(e);
   }
 };
 

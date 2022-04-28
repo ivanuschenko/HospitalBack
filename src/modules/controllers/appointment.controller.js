@@ -1,4 +1,3 @@
-const { status } = require('express/lib/response');
 const Appointment = require('../../models/appointments');
 const appointmentService = require('../service/appointmets-service');
 
