@@ -5,8 +5,7 @@ const {
   registration,
   signIn,
   signOut, 
-  refresh,
-  getAllUsers 
+  refresh, 
 } = require('../controllers/user.controller');
  
 router.post('/registration',registration);

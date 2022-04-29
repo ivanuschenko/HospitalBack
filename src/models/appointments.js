@@ -5,7 +5,7 @@ const Schema = mongoose.Schema;
 const appointmentScheme = new Schema({
   patient: String,
   doctor: String,
-  date: Date,
+  date: String,
   complaint: String,
   userID: String
 });

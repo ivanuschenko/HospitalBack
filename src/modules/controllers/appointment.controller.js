@@ -1,45 +1,60 @@
-const { status } = require('express/lib/response');
 const Appointment = require('../../models/appointments');
-const ListService = require('../service/appointmets-service');
-const UserModel = require('../../models/users');
+const appointmentService = require('../service/appointmets-service');
 
 module.exports.getAllList = async (req, res, next) => {
-  try {
-    const {refreshToken} = req.cookies;
-    const listById = await ListService.showById(refreshToken);
+  try {   
+    const {accessToken} = req.cookies;     
+    const listById = await appointmentService.showById(accessToken);    
     res.send(listById);
   } catch (e) {
-    next(e);
+    next(e);    
   } 
 };
 
 module.exports.createAppointment = async (req, res, next) => {
   try {
-    const {refreshToken} = req.cookies;
-    const {patient, doctor, date, complaint} = req.body;
-    const listData = await ListService.createNewList(patient, doctor, date, complaint, refreshToken);    
-    res.send(listData);    
+    const { accessToken } = req.cookies;
+    const { name, doctor, date, complaint } = req.body;
+    const listData = await appointmentService.createNewList(
+      name,
+      doctor,
+      date,
+      complaint,
+      accessToken
+    );
+    res.send(listData);
   } catch (e) {
-    next(e); 
-  } 
+    next(e);
+  }
 };
 
- module.exports.updateAppointment = (req, res) => {
+module.exports.updateAppointment = async (req, res, next) => {
   if (!req.query._id) {
-    res.status(422).send('Id is not defiend'); 
-  } 
-  const bodyId = req.query._id;  
-  Appointment.updateOne({_id: bodyId}, req.body).then(result => {
-   res.status(200).send(result);
-  });
+    res.status(422).send('Id is not defiend');
+  }
+  try {
+    const { accessToken } = req.cookies;
+    const bodyId = req.query._id;
+    const result = await appointmentService.updateOneList(
+      bodyId,
+      req.body,
+      accessToken
+    );
+    res.send(result);
+  } catch (e) {
+    next(e);
+  }
 };
 
 module.exports.deleteAppointment = (req, res) => {
   if (!req.query._id) {
     res.status(422).send('Id is not defiend'); 
-  } 
-  const queryId = req.query._id;  
-  sickList.deleteOne({_id: queryId}).then(result => {
-    res.status(200).send('success!')      
-  });
+  }
+  try {
+    const queryId = req.query._id;  
+    Appointment.deleteOne({_id: queryId}).
+    res.status(200).send('success!');
+  } catch (e) {
+    next(e)
+  }
 };
