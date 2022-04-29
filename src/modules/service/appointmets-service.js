@@ -38,4 +38,5 @@ class AppointmentService {
     return result; 
   }
 }
+
 module.exports = new AppointmentService();
