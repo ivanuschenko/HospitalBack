@@ -1,5 +1,6 @@
 const express = require('express');
 const router = express.Router();
+const authMiddleWare = require('../../middlewares/auth-middlewares')
 
 const {
   getAllList,
@@ -9,7 +10,7 @@ const {
  
 } = require('../controllers/appointment.controller');
 
-router.get('/allList', getAllList);
+router.get('/allList', authMiddleWare, getAllList);
 router.post('/createAppointment', createAppointment);
 router.patch('/updateAppointment', updateAppointment);
 router.delete('/deleteAppointment', deleteAppointment);

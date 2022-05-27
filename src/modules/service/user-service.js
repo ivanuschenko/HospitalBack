@@ -22,7 +22,7 @@ class UserService {
   }
   
   async signIn(name, password) {
-    const user = await UserModel.findOne({name});
+    const user = await UserModel.findOne({name});   
     if (!user) {
       throw ApiError.BadRequest(`Пользователь с таким именем ${name} не найден`);
     }
@@ -30,12 +30,12 @@ class UserService {
     if (!isPassEquals) {
       throw ApiError.BadRequest('Неверный пароль');
     }      
-    const tokens = tokenService.generateTokens({id : user._id, name: user.name});      
-    await tokenService.saveToken(user._id , tokens.refreshToken);      
+    const tokens = tokenService.generateTokens({id : user._id, name: user.name});        
+    await tokenService.saveToken(user._id , tokens.refreshToken);       
     return {
       ...tokens        
-  }
-} 
+   }
+  } 
 
   async signOut(refreshToken) {
     const token = await tokenService.removeToken(refreshToken);      
@@ -47,10 +47,10 @@ class UserService {
       throw ApiError.UnauthorizedError();
     }
     const userData = tokenService.validateRefreshToken(refreshToken);
-    const tokenFromDb = tokenService.findToken(refreshToken);
+    const tokenFromDb = tokenService.findToken(refreshToken);      
     if (!userData || !tokenFromDb) {
       throw ApiError.UnauthorizedError();
-    }
+    }   
     const user = await UserModel.findById(userData.id);
     const tokens = tokenService.generateTokens({id : user._id, name: user.name});      
     await tokenService.saveToken(user._id , tokens.refreshToken);

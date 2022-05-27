@@ -7,6 +7,7 @@ module.exports.registration = async (req, res, next) => {
   try {
     const { name, password } = req.body;
     const userData = await userService.registration(name, password);
+    res.cookie('accessToken', userData.accessToken, lifeTime);      
     res.cookie("refreshToken", userData.refreshToken, {lifeTime});
     return res.json(userData);
   } catch (e) {
@@ -15,9 +16,9 @@ module.exports.registration = async (req, res, next) => {
 };
  
 module.exports.signIn = async (req, res, next) => { 
-  const { name, password } = req.body;     
+  const { name, password } = req.body;    
   try {    
-    const userData = await userService.signIn(name, password);
+    const userData = await userService.signIn(name, password);      
     res.cookie('accessToken', userData.accessToken, lifeTime);          
     res.cookie('refreshToken', userData.refreshToken, lifeTime);
     return res.json(userData);    
@@ -27,7 +28,7 @@ module.exports.signIn = async (req, res, next) => {
 };
 
 module.exports.signOut = async (req, res, next) => {  
-  try {
+  try {    
     const {refreshToken} = req.cookies;         
     const token = await userService.signOut(refreshToken);
     res.clearCookie('accessToken')
@@ -40,9 +41,11 @@ module.exports.signOut = async (req, res, next) => {
 
 module.exports.refresh = async(req, res, next) => {
   try {
-    const { refreshToken } = req.cookies;
+    const { refreshToken } = req.cookies;    
     const userData = await userService.refresh(refreshToken);
-    res.cookie('refreshToken', userData.refreshToken, lifeTime);
+    res.clearCookie('accessToken');
+    res.cookie('accessToken', userData.accessToken, lifeTime); 
+    res.cookie('refreshToken', userData.refreshToken, lifeTime);    
     return res.json(userData);
   } catch (e) {
     next(e);

@@ -10,6 +10,6 @@ const {
  
 router.post('/registration',registration);
 router.post('/signIn', signIn);
-router.post('/signOut', signOut);
+router.get('/signOut', signOut);
 router.get('/refresh',refresh);
 module.exports = router;
